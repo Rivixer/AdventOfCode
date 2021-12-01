@@ -3,8 +3,8 @@ from advent_of_code import AdventOfCode
 
 class Day01(AdventOfCode):
     def __init__(self, test = False):
-        super().__init__(test)
-        self.measurements = super().load_list_from_file(int)
+        super().__init__(1, test)
+        self.measurements = super().load_list_from_file(int, 'measurements')
         self.part1()
         self.part2()
 
@@ -14,7 +14,7 @@ class Day01(AdventOfCode):
             if (self.measurements[i] > self.measurements[i-1]):
                 counter +=1
 
-        super().print_answer(counter)
+        super().print_answer(1, counter)
 
     def part2(self):
         last_sum = sum(self.measurements[:3])
@@ -26,4 +26,4 @@ class Day01(AdventOfCode):
                 counter += 1
             last_sum = this_sum
 
-        super().print_answer(counter)
+        super().print_answer(2, counter)

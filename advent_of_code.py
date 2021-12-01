@@ -2,18 +2,19 @@ from typing import Type
 
 
 class AdventOfCode:
-    def __init__(self, test: bool = False):
+    def __init__(self, day: int, test: bool = False):
+        self.day = day
         self.test = test
-
-    def load_list_from_file(self, type: Type) -> list:
-        filename = 'test.txt' if self.test else 'measurements.txt'
+        
+    def load_list_from_file(self, type: Type, filename: str = 'file') -> list:
+        filename = 'test.txt' if self.test else f'{filename}.txt'
         
         with open(f'Day01/{filename}') as f:
-            measurements = list(map(type, f.readlines()))
+            result = list(map(type, f.readlines()))
 
-        return measurements
+        return result
 
-    def print_answer(self, answer):
+    def print_answer(self, part: int,  answer):
         if self.test:
             print('TEST | ', end='')
-        print(f'Day 01 / part 1: {answer}')
+        print(f'Day {self.day} / part {part}: {answer}')
