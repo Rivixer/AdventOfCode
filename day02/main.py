@@ -21,3 +21,19 @@ class Day02(AdventOfCode):
                 depth -= n
 
         super().print_answer(1, f'{horizontal=}, {depth=} ({horizontal*depth})')
+
+    def part2(self):
+        horizontal = 0
+        depth = 0
+        aim = 0
+
+        for i, n in zip(self.instructions, self.numbers):
+            if i == 'forward':
+                horizontal += n
+                depth += n * aim
+            elif i == 'down':
+                aim += n
+            elif i == 'up':
+                aim -= n
+        
+        super().print_answer(1, f'{horizontal=}, {depth=} ({horizontal*depth})')
