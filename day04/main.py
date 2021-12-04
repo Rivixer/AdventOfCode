@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from advent_of_code import AdventOfCode
 
 
@@ -9,6 +9,7 @@ class Day04(AdventOfCode):
         self.numbers = self._load_numbers()
         self.tabs = self._load_tabs()
         self.part1()
+        self.part2()
 
     def _load_numbers(self):
         with open(f'day04/{"bingo" if not self.test else "test"}.txt') as f:
@@ -48,20 +49,38 @@ class Day04(AdventOfCode):
 
         return Ttabs
 
-    def _check_win(self) -> int:
+    def _check_win(self, part2 = False) -> Union[int, List[int]]:
         """Return number board if true (first board -> 0)"""
+        board_not_win = list(range(len(self.tabs)))
 
         for index, tab in enumerate(self.tabs):
             for t in tab:
                 if all(map(lambda i: i == -1, t)):
-                    return index
+                    if part2:
+                        try:
+                            board_not_win.remove(index)
+                        except: pass
+                    else:
+                        return index
 
         for index, tab in enumerate(self.tabs):
             for k in range(5):
                 if all(map(lambda i: i[k] == -1, tab)):
-                    return index
+                    if part2:
+                        try:
+                            board_not_win.remove(index)
+                        except: pass
+                    else:
+                        return index
+        if part2:
+            return board_not_win
 
-        return False
+    def _check_win_2(self, last_board_not_win: list) -> Union[int, bool]:
+        board_not_win = self._check_win(part2 = True)
+        if len(board_not_win) == 1:
+            return board_not_win
+        if len(board_not_win) == 0:
+            return last_board_not_win[0]
 
     def _get_sum_of_unmarked(self, board_index):
         result = 0
@@ -78,7 +97,23 @@ class Day04(AdventOfCode):
             for tab in range(len(new_tab)):
                 for t in range(len(new_tab[tab])):
                     new_tab[tab][t] = (list(map(lambda i: -1 if i == number or i == -1 else i, new_tab[tab][t])))
-            if (board_index := self._check_win()) is not False :
+            if (board_index := self._check_win()):
                 break
         sum_of_unmarked = self._get_sum_of_unmarked(board_index)
         super().print_answer(1, sum_of_unmarked * number)
+
+    def part2(self):
+        self.numbers = self._load_numbers()
+        self.tabs = self._load_tabs()
+        new_tab = self.tabs.copy()
+        board_index = None
+        for number in self.numbers:
+            for tab in range(len(new_tab)):
+                for t in range(len(new_tab[tab])):
+                    new_tab[tab][t] = (list(map(lambda i: -1 if i == number or i == -1 else i, new_tab[tab][t])))
+            board_index = self._check_win_2(board_index)
+            if isinstance(board_index, int):
+                break
+            
+        sum_of_unmarked = self._get_sum_of_unmarked(board_index)
+        super().print_answer(2, sum_of_unmarked * number)
