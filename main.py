@@ -9,4 +9,4 @@ if __name__ == '__main__':
     Day02(test=False)
     Day03(test=False)
     Day04(test=False)
-    Day05(test=True)
+    Day05(test=False)
