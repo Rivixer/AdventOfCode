@@ -6,11 +6,15 @@ class AdventOfCode:
         self.day = day
         self.test = test
         
-    def load_list_from_file(self, type: Union[Type[int], Type[str], Type[float], Type[bool]], filename: str = 'file', item: int = 0) -> list:
+    def load_list_from_file(self, type: Union[Type[int], Type[str], Type[float], Type[bool]], filename: str = 'file', item: int = 0, splitter: str = ' ', oneline:bool = False) -> list:
         filename = 'test.txt' if self.test else f'{filename}.txt'
         
         with open(f'Day{("0" + str(self.day)) if self.day < 10 else self.day}/{filename}') as f:
-            result = list(map(lambda i: type(i.split(' ')[item].strip()), f.readlines()))
+            if oneline:
+                result = list(map(type, f.readlines()[item].strip().split(splitter)))
+            else:
+                result = list(map(lambda i: type(i.split(splitter)[item].strip()), f.readlines()))
+                
 
         return result
 
