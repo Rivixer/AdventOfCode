@@ -18,7 +18,7 @@ class AdventOfCode:
 
         return result
 
-    def print_answer(self, part: int,  answer):
+    def print_answer(self, part: int, answer, time = None):
         if self.test:
             print('TEST | ', end='')
-        print(f'Day {self.day} / part {part}: {answer}')
+        print(f'Day {self.day} / part {part}: {answer}' + (f' ({time}s)' if time else ''))
