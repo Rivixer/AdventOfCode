@@ -1,4 +1,5 @@
 from advent_of_code import AdventOfCode
+import time
 
 
 class Day07(AdventOfCode):
@@ -13,13 +14,22 @@ class Day07(AdventOfCode):
         data = self.data.copy()
         min_fuel = None
         for i in range(min(self.data), max(self.data)):
-            fuel = 0
-            for d in data:
-                fuel += abs(d - i)
+            fuel = sum([abs(d-i) for d in data])
             if min_fuel is None or fuel < min_fuel:
                 min_fuel = fuel
         super().print_answer(1, min_fuel)
 
+    def _count_fuel(self, steps: int):
+        return sum([i for i in range(steps+1)])
+        
 
     def part2(self):
-        pass
+        start = time.time()
+        data = self.data.copy()
+        min_fuel = None
+        for i in range(min(self.data), max(self.data)):
+            fuel = sum([self._count_fuel(abs(d-i)) for d in data])
+            if min_fuel is None or fuel < min_fuel:
+                min_fuel = fuel
+        stop = time.time()
+        super().print_answer(2, min_fuel, stop-start)
