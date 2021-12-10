@@ -7,6 +7,7 @@ from day06.main import Day06
 from day07.main import Day07
 from day08.main import Day08
 from day09.main import Day09
+from day10.main import Day10
 
 if __name__ == '__main__':
     Day01(test=False)
@@ -18,3 +19,4 @@ if __name__ == '__main__':
     #Day07(test=False)
     Day08(test=False)
     Day09(test=False)
+    Day10(test=False)
