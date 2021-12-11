@@ -84,5 +84,23 @@ class Day11(AdventOfCode):
         for column in range(len(self.octopuses)):
             print(self.octopuses[column])
 
+    def _are_synchronized(self):
+        result = []
+        for line in self.octopuses:
+            result.append(all(map(lambda i: i.flashed_in_this_round(), line)))
+        return all(result)
+
+
     def part2(self):
-        pass
+        i = 100
+        while not self._are_synchronized():
+            i += 1
+            self._next_step_in_all()
+            while self._any_can_flash():
+                for column in range(len(self.octopuses)):
+                    for row in range(len(self.octopuses[column])):
+                        if self.octopuses[column][row].can_flash():
+                            self.octopuses[column][row].flash()
+                            self._add_around(column, row)
+        super().print_answer(2, i)
+        

@@ -9,7 +9,6 @@ from day08.main import Day08
 from day09.main import Day09
 from day10.main import Day10
 from day11.main import Day11
-from day11.reddit import main
 
 if __name__ == '__main__':
     Day01(test=False)
