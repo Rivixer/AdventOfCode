@@ -1,6 +1,7 @@
 class Stack:
-    def __init__(self, stack: list = list()):
+    def __init__(self, stack: list = list(), visited_small_2_times = False):
         self._stack = stack
+        self.visited_small_2_times = visited_small_2_times
 
     def it_is_last_item(self, item):
         return item == self._stack[-1]

@@ -2,7 +2,6 @@ from typing import List
 from advent_of_code import AdventOfCode
 from day12.cave import Cave
 from day12.stack import Stack
-import copy
 
 
 class Day12(AdventOfCode):
@@ -11,10 +10,10 @@ class Day12(AdventOfCode):
         super().__init__(12, test)
         self.caves: List[Cave] = []
         self.part1_answer = 0
+        self.part2_answer = 0
         self._load_data()
         self.part1()
-        
-        #self.part2()
+        self.part2()
 
     def _check_in_caves(self, cave: str):
         for c in self.caves:
@@ -56,6 +55,28 @@ class Day12(AdventOfCode):
                 self.pathing(i, stack)
             else:
                 self.part1_answer += 1
+
+    def _how_much_cave_in_path(self, stack: Stack, cave):
+        result = 0
+        for c in stack.get_all_items():
+            if c == cave:
+                result += 1
+        return result
+
+    def pathing2(self, cave: Cave, s: Stack):
+        last_stack = Stack(s.get_all_items().copy(), s.visited_small_2_times)
+        i: Cave
+        for i in cave.connections:
+            stack = Stack(last_stack.get_all_items().copy(), s.visited_small_2_times)
+            if i.is_small and i in stack.get_all_items() and stack.visited_small_2_times or str(i) == 'start':
+                continue
+            stack.add_item(i)
+            if i.is_small and not stack.visited_small_2_times and self._how_much_cave_in_path(stack, i) == 2:
+                stack.visited_small_2_times = True
+            if str(i) != 'end':
+                self.pathing2(i, stack)
+            else:
+                self.part2_answer += 1
             
     def part1(self):
         stack = Stack()
@@ -63,3 +84,10 @@ class Day12(AdventOfCode):
         stack.add_item(start)
         self.pathing(start, stack)
         super().print_answer(1, self.part1_answer)
+
+    def part2(self):
+        stack = Stack()
+        start = self._get_cave_by_name('start')
+        stack.add_item(start)
+        self.pathing2(start, stack)
+        super().print_answer(2, self.part2_answer)
