@@ -2,12 +2,14 @@ from advent_of_code import AdventOfCode
 
 
 class Day06(AdventOfCode):
-    def __init__(self, test = False):
+    def __init__(self, test = False, part1 = True, part2 = True):
         self.test = test
         super().__init__(6, test)
         self.data = super().load_list_from_file(int, 'data', splitter=',', oneline=True)
-        self.part1()
-        self.part2()
+        if part1:
+            self.part1()
+        if part2:
+            self.part2()
 
     def part1(self):
         data = self.data.copy()

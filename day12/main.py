@@ -5,15 +5,17 @@ from day12.stack import Stack
 
 
 class Day12(AdventOfCode):
-    def __init__(self, test = False):
+    def __init__(self, test = False, part1 = True, part2 = True):
         self.test = test
         super().__init__(12, test)
         self.caves: List[Cave] = []
         self.part1_answer = 0
         self.part2_answer = 0
         self._load_data()
-        self.part1()
-        self.part2()
+        if part1:
+            self.part1()
+        if part2:
+            self.part2()
 
     def _check_in_caves(self, cave: str):
         for c in self.caves:
