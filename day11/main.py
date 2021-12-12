@@ -1,4 +1,3 @@
-from types import resolve_bases
 from typing import List
 from advent_of_code import AdventOfCode
 from day11.octopus import Octopus
@@ -10,7 +9,6 @@ class Day11(AdventOfCode):
         super().__init__(11, test)
         self.data = self._load_data()
         self.octopuses = self._load_octopuses()
-        self.i = 0
         self.part1()
         self.part2()
         
