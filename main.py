@@ -25,4 +25,4 @@ if __name__ == '__main__':
     Day10(test=False)
     Day11(test=False)
     Day12(test=False, part2=False)
-    Day13(test=False, part2=False)
+    Day13(test=False)

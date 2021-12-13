@@ -50,6 +50,7 @@ class Day13(AdventOfCode):
                 self.tab[x] = self._merge(self.tab[x], self.tab[y])
                 self.tab.pop(-1)
             self.tab.pop(-1)
+            self.maxY = Y
 
         if X is not None:
             for y in range(self.maxY):
@@ -58,6 +59,7 @@ class Day13(AdventOfCode):
                 self.tab[y] = self._merge(left, right[::-1])
             for t in self.tab:
                 t.pop(-1)
+            self.maxX = X
 
     def _count_hashtags(self):
         result = 0
@@ -80,4 +82,17 @@ class Day13(AdventOfCode):
         super().print_answer(1, self._count_hashtags())
 
     def part2(self):
-        pass
+        self._generate_tab()
+        coordinates = self.coordinates
+        tab = self.tab
+        for coordinate in coordinates:
+            c1, c2 = coordinate
+            tab[c2][c1] = '#'
+
+        for instruction in self.instructions:
+            index, count = instruction.split(' ')[2].split('=')
+            if index == 'x':
+                self._fold(X=int(count))
+            else:
+                self._fold(Y=int(count))
+        super().print_answer(2, self.tab)
