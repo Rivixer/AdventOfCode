@@ -15,10 +15,17 @@ class AdventOfCode:
             else:
                 result = list(map(lambda i: type(i.split(splitter)[item].strip()), f.readlines()))
                 
-
         return result
 
     def print_answer(self, part: int, answer, time = None):
         if self.test:
             print('TEST | ', end='')
+        if isinstance(answer, list):
+            if isinstance(answer[0], list):
+                print(f'Day {self.day} / part {part}:' + (f' ({time}s)' if time else ''))
+                for l in answer:
+                    print(''.join(l))
+                return
+            else:
+                answer = ', '.join(answer)
         print(f'Day {self.day} / part {part}: {answer}' + (f' ({time}s)' if time else ''))
