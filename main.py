@@ -13,20 +13,22 @@ from day12.main import Day12
 from day13.main import Day13
 from day14.main import Day14
 from day15.main import Day15
+from day17.main import Day17
 
 if __name__ == '__main__':
-    Day01(test=False)
-    Day02(test=False)
-    Day03(test=False)
-    Day04(test=False)
-    Day05(test=False)
-    Day06(test=False, part1=False)
-    Day07(test=False, part2=False)
-    Day08(test=False)
-    Day09(test=False)
-    Day10(test=False)
-    Day11(test=False)
-    Day12(test=False, part2=False)
-    Day13(test=False)
-    Day14(test=False)
-    Day15(test=False, part2=False)
+    # Day01(test=False)
+    # Day02(test=False)
+    # Day03(test=False)
+    # Day04(test=False)
+    # Day05(test=False)
+    # Day06(test=False, part1=False)
+    # Day07(test=False, part2=False)
+    # Day08(test=False)
+    # Day09(test=False)
+    # Day10(test=False)
+    # Day11(test=False)
+    # Day12(test=False, part2=False)
+    # Day13(test=False)
+    # Day14(test=False)
+    # Day15(test=False, part2=False)
+    Day17(test=False, part1=False)
