@@ -1,5 +1,6 @@
 from advent_of_code import AdventOfCode
 import math
+import time
 
 
 class Day18(AdventOfCode):
@@ -107,8 +108,10 @@ class Day18(AdventOfCode):
         data = data[:max_tab_indexes[0]  -1] + '0' + data[max_tab_indexes[1]+max_tab_lengths[1]+1:]
         return data
 
-    def addition(self, data: str) -> str:
-        return '[' + data + ',' + self.data.pop(0) + ']'
+    def addition(self, data: str, data2:str = None) -> str:
+        if data2 is None:
+            return '[' + data + ',' + self.data.pop(0) + ']'
+        return '[' + data + ',' + data2 + ']'
 
     def split(self, data: str) -> str:
         numbers = '0123456789'
@@ -148,4 +151,20 @@ class Day18(AdventOfCode):
         super().print_answer(1, self.magnitude(data))
         
     def part2(self):
-        pass
+        start = time.time()
+        magnitudes = []
+        for d1 in self.data:
+            for d2 in self.data:
+                if d1 == d2:
+                    continue
+                data = self.addition(d1, d2)
+                while True:
+                    max_degree = self.get_max_degree(data)
+                    if max_degree > 4:
+                        data = self.explode(data, max_degree)
+                    elif self.any_number_greater_than_9(data):
+                        data = self.split(data)
+                    else:
+                        break
+                magnitudes.append(int(self.magnitude(data)))
+        super().print_answer(2, max(magnitudes), time.time() - start)
