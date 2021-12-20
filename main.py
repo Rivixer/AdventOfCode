@@ -16,6 +16,7 @@ from day15.main import Day15
 from day16.main import Day16
 from day17.main import Day17
 from day18.main import Day18
+from day20.main import Day20
 
 if __name__ == '__main__':
     # Day01(test=False)
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     # Day13(test=False)
     # Day14(test=False)
     # Day15(test=False, part2=False)
-    Day16(test=False)
+    # Day16(test=False)
     # Day17(test=False, part1=False)
-    #Day18(test=False, part2=False)
+    # Day18(test=False, part2=False)
+    Day20(test=False)
