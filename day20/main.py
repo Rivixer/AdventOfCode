@@ -1,3 +1,4 @@
+from typing import List
 from advent_of_code import AdventOfCode
 
 class Day20(AdventOfCode):
@@ -55,24 +56,66 @@ class Day20(AdventOfCode):
             result += i[5:-5].count('#')
         return result
 
+    def add_rings_around_image(self, count):
+        for _ in range(count):
+            for i in range(len(self.image)):
+                self.image[i] = '.' + self.image[i] + '.'
+            self.image.insert(0, '.'*len(self.image[0]))
+            self.image.append('.'*len(self.image[0]))
+
+    def convert_ring(self, image: List[str]):
+        result = image.copy()
+
+        if image[0][0] == '.':
+            result[0] = image[0].replace('.', '#')
+            result[-1] = image[-1].replace('.', '#')
+        else:
+            result[0] = image[0].replace('#', '.')
+            result[-1] = image[-1].replace('#', '.')
+        
+        for i in range(len(image)):
+            if image[0][0] == '.':
+                result[i] = '#' + result[i][1:-1] + '#'
+            else:
+                result[i] = '.' + result[i][1:-1] + '.'
+        return result
+
     def part1(self):
-        for _ in range(5):
-            self.add_ring_around_image()
+        self.add_rings_around_image(5)
         
         for _ in range(2):
+            
             self.add_ring_around_image()
             new_image = self.get_empty_image()
+
             for row in range(1, len(self.image)-1):
                 for column in range(1, len(self.image[row])-1):
                     characters = self.get_characters_around_image(row, column)
                     number = self.convert_characters_to_dec_number(characters)
                     character = self.get_character_from_enhancement(number)
                     new_image[row] = self.update_str(new_image[row], column, character)
+
             self.image = new_image
 
         super().print_answer(1, self.how_many_lit())
 
-        self.print_image()
-
     def part2(self):
-        pass
+        self.load_data()
+        self.add_rings_around_image(55)
+
+        for i in range(50):
+            new_image = self.get_empty_image()
+            
+            for row in range(1, len(self.image)-1):
+                for column in range(1, len(self.image[row])-1):
+                    characters = self.get_characters_around_image(row, column)
+                    number = self.convert_characters_to_dec_number(characters)
+                    character = self.get_character_from_enhancement(number)
+                    new_image[row] = self.update_str(new_image[row], column, character)
+
+            if i % 2 == 0:
+                new_image = self.convert_ring(new_image)
+
+            self.image = new_image
+
+        super().print_answer(2, self.how_many_lit())

@@ -38,5 +38,5 @@ if __name__ == '__main__':
     # Day16(test=False)
     # Day17(test=False, part1=False)
     # Day18(test=False, part2=False)
-    # Day20(test=False)
-    Day21(test=False)
+    Day20(test=False, part1 = True)
+    # Day21(test=False)
