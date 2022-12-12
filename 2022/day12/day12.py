@@ -1,4 +1,4 @@
-from priority_queue import PiorityQueue
+from priority_queue import PriorityQueue
 
 with open('input.txt', 'r') as f:
     lines = list(map(str.strip, f.readlines()))
@@ -15,7 +15,7 @@ def get_prio(y, x) -> int:
     return ord(grid[y][x]) & 0b11111
 
 
-def solve(queue: PiorityQueue):
+def solve(queue: PriorityQueue):
     history: list[tuple[int, int]] = []
 
     while len(queue) > 0:
@@ -39,8 +39,8 @@ def solve(queue: PiorityQueue):
             queue.add(prio+1, (yyy, xxx))
 
 
-queue1 = PiorityQueue()
-queue2 = PiorityQueue()
+queue1 = PriorityQueue()
+queue2 = PriorityQueue()
 
 for y in range(height):
     for x in range(width):

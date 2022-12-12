@@ -1,4 +1,4 @@
-class PiorityQueue:
+class PriorityQueue:
     def __init__(self):
         self.__queue: list[tuple[int, tuple[int, int]]] = list()
 
