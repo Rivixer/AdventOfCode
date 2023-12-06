@@ -6,6 +6,7 @@ pub enum InputType {
     NotTest,
     Other(String),
     OtherSep(String, String),
+    Someones(String),
 }
 
 pub struct Input {
@@ -42,14 +43,19 @@ fn read_from_file(day: u8, input_type: InputType) -> Input {
             let p2_input = fs::read_to_string(file_path2).unwrap_or(p1_input.clone());
             Input::from_two_inputs(p1_input, p2_input)
         }
+        InputType::Someones(s) => {
+            let file_path = format!("inputs/day{:0>2}_s_{s}.txt", day);
+            Input::from_one_input(&fs::read_to_string(&file_path).unwrap())
+        }
         _ => panic!(),
     }
 }
 
 pub fn read_input(day: u8, input_type: InputType) -> Input {
     match input_type {
-        InputType::Test => read_from_file(day, input_type),
-        InputType::NotTest => read_from_file(day, input_type),
+        InputType::Test | InputType::NotTest | InputType::Someones(_) => {
+            read_from_file(day, input_type)
+        }
         InputType::Other(s) => Input::from_one_input(&s),
         InputType::OtherSep(s1, s2) => Input::from_two_inputs(s1, s2),
     }
