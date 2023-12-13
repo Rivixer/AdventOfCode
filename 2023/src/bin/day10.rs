@@ -140,7 +140,7 @@ impl Grid {
         .collect()
     }
 
-    fn enclosed_titles(&self, lp: &Vec<&Pipe>) -> usize {
+    fn enclosed_tiles(&self, lp: &Vec<&Pipe>) -> usize {
         let (start, neighbors) = self.get_start_and_its_neighbors();
         let consider_start = neighbors.iter().any(|v| v.y == start.y + 1);
 
@@ -189,7 +189,7 @@ fn part1(data: &str) -> usize {
 fn part2(data: &str) -> usize {
     let grid = Grid::new(data);
     let lp = calculate(&grid);
-    grid.enclosed_titles(&lp)
+    grid.enclosed_tiles(&lp)
 }
 
 fn main() {
