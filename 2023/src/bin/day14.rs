@@ -73,7 +73,7 @@ fn part2(data: &str) -> usize {
     let mut result: Option<usize> = None;
     let n = 1_000_000_000;
 
-    'outer: for i in 1..n {
+    for i in 1..n {
         for _ in 0..4 {
             grid.shift_up();
             grid.rotate_right();
@@ -82,7 +82,7 @@ fn part2(data: &str) -> usize {
             let start = grid_cache[&grid];
             let length = i - start;
             result = Some(score_cache[&(start + (n - start) % length)]);
-            break 'outer;
+            break;
         }
         score_cache.insert(i, grid.score());
         grid_cache.insert(grid.clone(), i);
