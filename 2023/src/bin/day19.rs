@@ -1,19 +1,19 @@
 use aoc2023::utils::*;
 use itertools::Itertools;
 use regex::Regex;
-use std::str::FromStr;
+use std::collections::{HashMap, VecDeque};
 
 const DAY: u8 = 19;
 
 struct Part {
-    x: i32,
-    m: i32,
-    a: i32,
-    s: i32,
+    x: i64,
+    m: i64,
+    a: i64,
+    s: i64,
 }
 
 impl Part {
-    fn new(values: &[i32]) -> Self {
+    fn new(values: &[i64]) -> Self {
         Part {
             x: values[0],
             m: values[1],
@@ -23,33 +23,21 @@ impl Part {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum Operator {
     LT,
     GT,
 }
 
-impl FromStr for Operator {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "<" => Ok(Operator::LT),
-            ">" => Ok(Operator::GT),
-            _ => Err(()),
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Condition {
     category: String,
     operator: Operator,
-    value: i32,
+    value: i64,
 }
 
 impl Condition {
-    fn new(category: String, operator: Operator, value: i32) -> Self {
+    fn new(category: String, operator: Operator, value: i64) -> Self {
         Condition {
             category,
             operator,
@@ -58,7 +46,7 @@ impl Condition {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Rule {
     condition: Option<Condition>,
     destination: String,
@@ -111,7 +99,7 @@ fn parse_input(data: &str) -> (Vec<Workflow>, Vec<Part>) {
             Part::new(
                 &re_part
                     .find_iter(line)
-                    .map(|v| v.as_str().parse::<i32>().unwrap())
+                    .map(|v| v.as_str().parse::<i64>().unwrap())
                     .collect_vec(),
             )
         })
@@ -132,7 +120,7 @@ fn parse_rule(rule: &str, regex: &Regex) -> Option<Rule> {
                     ">" => Operator::GT,
                     _ => unreachable!(),
                 },
-                captures.get(3).unwrap().as_str().parse::<i32>().unwrap(),
+                captures.get(3).unwrap().as_str().parse::<i64>().unwrap(),
             ));
             return Some(Rule::new(condition, destination));
         } else {
@@ -161,7 +149,7 @@ fn find_matching_rule<'a>(workflow: &'a Workflow, part: &'a Part) -> Option<&'a 
 }
 
 #[timed::timed]
-fn part1(data: &str) -> i32 {
+fn part1(data: &str) -> i64 {
     let (workflows, parts) = parse_input(data);
     parts
         .iter()
@@ -183,16 +171,70 @@ fn part1(data: &str) -> i32 {
                 0
             }
         })
-        .sum()
+        .sum::<i64>()
 }
 
 #[timed::timed]
-fn part2(data: &str) -> i32 {
-    todo!()
+fn part2(data: &str) -> i64 {
+    let (workflows, _) = parse_input(data);
+    let mut result = 0;
+    let mut queue: VecDeque<(String, HashMap<&str, (i64, i64)>)> = VecDeque::from_iter(vec![(
+        "in".to_string(),
+        HashMap::from_iter(vec![
+            ("x", (1, 4000)),
+            ("m", (1, 4000)),
+            ("a", (1, 4000)),
+            ("s", (1, 4000)),
+        ]),
+    )]);
+
+    while let Some((workflow, mut part)) = queue.pop_front() {
+        if workflow == "A" {
+            result += part
+                .values()
+                .map(|range| range.1 - range.0 + 1)
+                .product::<i64>();
+            continue;
+        } else if workflow == "R" {
+            continue;
+        }
+
+        let rules = &workflows.iter().find(|w| w.name == workflow).unwrap().rules;
+
+        rules.iter().for_each(|rule| {
+            if let Some(condition) = &rule.condition {
+                let category_range = part.get(condition.category.as_str()).unwrap();
+                let mut old_start = category_range.0;
+                let mut old_stop = category_range.1;
+                let mut new_start = category_range.0;
+                let mut new_stop = category_range.1;
+
+                match condition.operator {
+                    Operator::LT => {
+                        old_start = std::cmp::max(old_start, condition.value);
+                        new_stop = std::cmp::min(new_stop, condition.value - 1);
+                    }
+                    Operator::GT => {
+                        new_start = std::cmp::max(new_start, condition.value + 1);
+                        old_stop = std::cmp::min(old_stop, condition.value);
+                    }
+                }
+
+                let mut new_part = part.clone();
+                new_part.insert(condition.category.as_str(), (new_start, new_stop));
+                queue.push_back((rule.destination.clone(), new_part));
+                part.insert(condition.category.as_str(), (old_start, old_stop));
+            } else {
+                queue.push_back((rule.destination.clone(), part.clone()));
+            }
+        })
+    }
+
+    result
 }
 
 fn main() {
     let input = read_input(DAY, InputType::NotTest);
     println!("Part 1: {}", part1(&input.part1));
-    // println!("Part 2: {}", part2(&input.part1));
+    println!("Part 2: {}", part2(&input.part1));
 }
